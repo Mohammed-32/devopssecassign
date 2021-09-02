@@ -408,10 +408,140 @@ Creating getjsoncodehelm
 
 ```
 
-5. Modify the values.yaml and Chart.yaml for the Imagepath, Pull Policy, Ingress details and tag
+2. Modify the values.yaml and Chart.yaml for the Imagepath, Pull Policy, Ingress details and tag
 (Templates are uploaded under helmcart folder)
 
-6. Installation of helm charts on EKS cluster
+3. Installation of helm charts on EKS cluster
 
 ```
+helm install getjsoncodehelm getjsoncodehelm/ --values getjsoncodehelm/values.yaml
+WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /root/.kube/config
+WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /root/.kube/config
+NAME: getjsoncodehelm
+LAST DEPLOYED: Thu Sep  2 11:04:09 2021
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+NOTES:
+1. Get the application URL by running these commands:
+  http://getrestservicepython.assignment.com/
+
 ```
+
+
+4. Validation of PODS using helm charts 
+
+```
+kubectl get pods -n default
+NAME                                       READY   STATUS             RESTARTS   AGE
+calljsoncode-deployment-5b4bfbf665-d4cff   0/1     CrashLoopBackOff   8          18m
+calljsoncode-deployment-5b4bfbf665-pvh6z   0/1     CrashLoopBackOff   8          18m
+getjsoncode-deployment-bf4d4d899-km4jm     1/1     Running            0          28m
+getjsoncode-deployment-bf4d4d899-r7lrx     1/1     Running            0          28m
+getjsoncodehelm-765b79f6fc-9xgjb           0/1     Running            0          20s
+
+
+```
+
+5. Contents of values.yaml
+
+```
+[root@ip-172-31-24-4 getjsoncodehelm]# cat values.yaml
+# Default values for getjsoncodehelm.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: 618873054107.dkr.ecr.us-east-2.amazonaws.com/devopsec-assignment-ecr
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "getjsoncode"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: true
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: getrestservicepython.assignment.com
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+```
+
+**************************************************************************************************************
+
+## **Phase 7: All urls**
+
+1. GET REST Service local container url
+
+http://18.224.151.69:8080/getStatus
+
+2. GET REST Service Kubernetes Load Balancer url
+
+http://aed7b0d3094294f45ac8057e1bb75e87-1543800842.us-east-2.elb.amazonaws.com:8080/getStatus
+
+
