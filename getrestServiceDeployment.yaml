@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: getjsoncode-deployment 
+  labels:
+    app: getjsoncode 
+spec:
+  replicas: 2 
+  selector:
+    matchLabels:
+      app: getjsoncode 
+  template:
+    metadata:
+      labels:
+        app: getjsoncode 
+    spec:
+      containers:
+      - name: getjsoncode 
+        image: 618873054107.dkr.ecr.us-east-2.amazonaws.com/devopsec-assignment-ecr:getjsoncode
+        stdin: true
+        tty: true 
+        ports:
+        - containerPort: 8080

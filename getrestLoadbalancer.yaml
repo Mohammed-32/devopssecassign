@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: getjsoncode-service-loadbalancer
+spec:
+  type: LoadBalancer
+  selector:
+    app: getjsoncode 
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

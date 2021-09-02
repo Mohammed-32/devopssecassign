@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: calljsoncode-deployment 
+  labels:
+    app: calljsoncode 
+spec:
+  replicas: 2 
+  selector:
+    matchLabels:
+      app: calljsoncode 
+  template:
+    metadata:
+      labels:
+        app: calljsoncode 
+    spec:
+      containers:
+      - name: calljsoncode 
+        image: 618873054107.dkr.ecr.us-east-2.amazonaws.com/devopsec-assignment-ecr:calljsoncodekubernetes 
+        stdin: true
+        tty: true 
+        ports:
+        - containerPort: 8080
